@@ -5,7 +5,7 @@ plugins {
     id("io.realm.kotlin")
     id("org.jlleitschuh.gradle.ktlint") version "11.6.1"
     id("dagger.hilt.android.plugin")
-    id("com.google.gms.google-services")
+    //id("com.google.gms.google-services")
 
 
 }
@@ -37,17 +37,17 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
+        kotlinCompilerExtensionVersion = "1.4.3"
     }
     packaging {
         resources {
@@ -88,7 +88,7 @@ dependencies {
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
 
     // Gson
-    implementation ("com.google.code.gson:gson:2.10")
+    //implementation ("com.google.code.gson:gson:2.10")
 
     // Runtime Compose
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")

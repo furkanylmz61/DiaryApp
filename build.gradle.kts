@@ -5,6 +5,6 @@ plugins {
     id("com.android.library") version "8.1.4" apply false
     id("io.realm.kotlin") version "1.12.0" apply false
     id("com.google.dagger.hilt.android") version "2.44" apply false
-    id ("com.google.gms.google-services") version "4.4.0" apply false
+    //id ("com.google.gms.google-services") version "4.4.0" apply false
     id("com.google.devtools.ksp") version "1.9.10-1.0.13"
 }

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.DiaryAppCourse.MySplash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#FBFCFF</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logobook</item>
+        <item name="postSplashScreenTheme">@style/Theme.DiaryAppCourse</item>
+    </style>
+</resources>
