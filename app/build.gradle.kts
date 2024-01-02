@@ -1,11 +1,13 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    //id ("com.google.devtools.ksp")
+
     id("kotlin-kapt")
     id("io.realm.kotlin")
     id("org.jlleitschuh.gradle.ktlint") version "11.6.1"
     id("dagger.hilt.android.plugin")
-    //id("com.google.gms.google-services")
+    id("com.google.gms.google-services")
 
 
 }
@@ -39,6 +41,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+        isCoreLibraryDesugaringEnabled= true
     }
     kotlinOptions {
         jvmTarget = "17"
@@ -88,7 +91,7 @@ dependencies {
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
 
     // Gson
-    //implementation ("com.google.code.gson:gson:2.10")
+    implementation ("com.google.code.gson:gson:2.10")
 
     // Runtime Compose
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
@@ -139,6 +142,9 @@ dependencies {
     kapt("com.google.dagger:hilt-compiler:2.49")
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
+
+    implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
+    implementation("com.google.firebase:firebase-analytics")
 
 
 }
