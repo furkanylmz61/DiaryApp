@@ -1,12 +1,15 @@
 package com.furkanylmz.diaryappcourse.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.furkanylmz.diaryappcourse.presentation.screens.auth.AuthenticationViewModel
 import com.furkanylmz.diaryappcourse.presentation.screens.auth.authenticationScreen
 import com.furkanylmz.diaryappcourse.util.Constants.WRITE_SCREEN_ARGUMENT_KEY
 import com.stevdzasan.messagebar.rememberMessageBarState
@@ -26,16 +29,37 @@ fun SetupNavGraph(startDestination: String, navController: NavHostController){
 
 fun NavGraphBuilder.authenticationRoute(){
     composable(route= Screen.Authentication.route){
+        val viewModel: AuthenticationViewModel = viewModel()
+        val loadingState by viewModel.loadingState
         val oneTabState = rememberOneTapSignInState()
         val messageBarState = rememberMessageBarState()
         authenticationScreen(
-            loadingState = oneTabState.opened,
+            loadingState = loadingState,
             oneTabState= oneTabState,
             messageBarState= messageBarState,
             onButtonClicked =
          {
             oneTabState.open()
-        }
+             viewModel.setLoading(true)
+        },
+            onTokenIdRecived = {tokenId ->
+             viewModel.signInWithMongoAtlas(
+                 tokenId = tokenId,
+                 onSuccess ={
+                     if (it){
+                        messageBarState.addSuccess("Successfully Authenticated!")
+                         viewModel.setLoading(false)
+                     }
+                 } ,onError= {
+                     messageBarState.addError(it)
+                     viewModel.setLoading(false)
+                 }
+             )
+            },
+
+            onDialogDismissed = { message ->
+                messageBarState.addError(Exception(message) )
+            }
         )
     }
 }
