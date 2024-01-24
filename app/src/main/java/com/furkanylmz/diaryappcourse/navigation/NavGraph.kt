@@ -144,6 +144,5 @@ fun NavGraphBuilder.writeRoute(){
         })
     ){
 
-
     }
 }
