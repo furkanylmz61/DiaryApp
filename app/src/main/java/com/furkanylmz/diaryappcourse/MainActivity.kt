@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
+import com.furkanylmz.diaryappcourse.data.repository.MongoDB
 import com.furkanylmz.diaryappcourse.navigation.Screen
 import com.furkanylmz.diaryappcourse.navigation.SetupNavGraph
 import com.furkanylmz.diaryappcourse.ui.theme.DiaryAppCourseTheme
@@ -18,6 +19,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             installSplashScreen()
             WindowCompat.setDecorFitsSystemWindows(window,false)
+            MongoDB.configureTheRealm()
             DiaryAppCourseTheme {
 
                 val navController= rememberNavController()
