@@ -10,7 +10,7 @@ import org.mongodb.kbson.ObjectId
 open class Diary :RealmObject {
     @PrimaryKey
     var _id : ObjectId = ObjectId.invoke()
-    var owner_id: String = ""
+    var ownerId: String = ""
     var mood: String = Mood.Neutral.name
     var title: String = ""
     var description: String = ""

@@ -21,8 +21,10 @@ import com.furkanylmz.diaryappcourse.presentation.components.DisplayAlertDialog
 import com.furkanylmz.diaryappcourse.presentation.screens.auth.AuthenticationViewModel
 import com.furkanylmz.diaryappcourse.presentation.screens.auth.authenticationScreen
 import com.furkanylmz.diaryappcourse.presentation.screens.home.HomeScreen
+import com.furkanylmz.diaryappcourse.presentation.screens.home.HomeViewModel
 import com.furkanylmz.diaryappcourse.util.Constants.APP_ID
 import com.furkanylmz.diaryappcourse.util.Constants.WRITE_SCREEN_ARGUMENT_KEY
+import com.furkanylmz.diaryappcourse.util.RequestState
 import com.stevdzasan.messagebar.rememberMessageBarState
 import com.stevdzasan.onetap.rememberOneTapSignInState
 import io.realm.kotlin.mongodb.App
@@ -31,7 +33,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Composable
-fun SetupNavGraph(startDestination: String, navController: NavHostController){
+fun SetupNavGraph(
+    startDestination: String,
+    navController: NavHostController,
+    onDataLoaded: () -> Unit
+){
     NavHost(
         startDestination = startDestination,
         navController = navController
@@ -40,7 +46,8 @@ fun SetupNavGraph(startDestination: String, navController: NavHostController){
             navigateToHome = {
                 navController.popBackStack()
                 navController.navigate(Screen.Home.route)
-            }
+            },
+            onDataLoaded =onDataLoaded
         )
         homeRoute(
             navigateToWrite = {
@@ -49,14 +56,16 @@ fun SetupNavGraph(startDestination: String, navController: NavHostController){
             navigateToAuth = {
                 navController.popBackStack()
                 navController.navigate(Screen.Authentication.route)
-            }
+            },
+            onDataLoaded = onDataLoaded
         )
         writeRoute()
     }
 }
 
 fun NavGraphBuilder.authenticationRoute(
-    navigateToHome : () -> Unit
+    navigateToHome : () -> Unit,
+    onDataLoaded: () -> Unit
 ){
     composable(route= Screen.Authentication.route){
         val viewModel: AuthenticationViewModel = viewModel()
@@ -64,6 +73,11 @@ fun NavGraphBuilder.authenticationRoute(
         val loadingState by viewModel.loadingState
         val oneTabState = rememberOneTapSignInState()
         val messageBarState = rememberMessageBarState()
+
+
+        LaunchedEffect(key1 = Unit){
+            onDataLoaded()
+        }
         authenticationScreen(
             authenticated = authenticated,
             loadingState = loadingState,
@@ -97,13 +111,23 @@ fun NavGraphBuilder.authenticationRoute(
 }
 fun NavGraphBuilder.homeRoute(
     navigateToWrite : () -> Unit,
-    navigateToAuth : () -> Unit
+    navigateToAuth : () -> Unit,
+    onDataLoaded: ()-> Unit
 ){
     composable(route= Screen.Home.route){
+        val viewModel: HomeViewModel= viewModel()
+        val diaries by viewModel.diaries
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         var signOutDialogOpened by remember { mutableStateOf(false) }
         val scope = rememberCoroutineScope()
+        
+        LaunchedEffect(key1 = diaries){
+            if (diaries !is RequestState.Loading){
+                onDataLoaded()
+            }
+        }
         HomeScreen(
+            diaries= diaries,
             drawerState = drawerState,
             onMenuClicked = {
                 scope.launch {
