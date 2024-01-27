@@ -13,7 +13,7 @@ import com.furkanylmz.diaryappcourse.model.Mood
 @Composable
 fun WriteScreen(
     uiState: UiState,
-    selectedDiary: Diary?,
+    moodName: () -> String,
     pagerState: PagerState,
     onTitleChanged: (String) -> Unit,
     onDescriptionChanged: (String) -> Unit,
@@ -26,7 +26,8 @@ fun WriteScreen(
     Scaffold (
         topBar = {
                  WriteTopBar(
-                     selectedDiary= selectedDiary,
+                     selectedDiary= uiState.selectedDiary,
+                     moodName = moodName,
                      onDeleteConfirmed = onDeleteConfirmed,
                      onBackPressed = onBackPressed,
                      )
