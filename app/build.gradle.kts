@@ -99,6 +99,8 @@ dependencies {
     // Splash API
     implementation("androidx.core:core-splashscreen:1.0.1")
 
+
+
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
@@ -119,7 +121,17 @@ dependencies {
     implementation ("com.google.accompanist:accompanist-swiperefresh:0.27.0")
 
     // Data Store
-    implementation ("androidx.datastore:datastore-preferences:1.1.0-alpha07")
+    implementation ("androidx.datastore:datastore-preferences:1.1.0-beta01")
+
+    // Date-Time Picker
+    implementation ("com.maxkeppeler.sheets-compose-dialogs:core:1.0.2")
+
+    // CALENDAR
+    implementation( "com.maxkeppeler.sheets-compose-dialogs:calendar:1.0.2")
+
+    // CLOCK
+    implementation( "com.maxkeppeler.sheets-compose-dialogs:clock:1.0.2")
+
 
     // Material
     implementation("androidx.compose.material:material:1.5.4")

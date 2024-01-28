@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import com.furkanylmz.diaryappcourse.model.Diary
 import com.furkanylmz.diaryappcourse.model.Mood
+import java.time.ZonedDateTime
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -18,6 +19,7 @@ fun WriteScreen(
     onTitleChanged: (String) -> Unit,
     onDescriptionChanged: (String) -> Unit,
     onDeleteConfirmed: () -> Unit,
+    onDateTimeUpdated: (ZonedDateTime) -> Unit,
     onBackPressed: () -> Unit,
     onSaveClicked : (Diary) -> Unit) {
     LaunchedEffect(key1 = uiState.mood){
@@ -31,6 +33,7 @@ fun WriteScreen(
                      moodName = moodName,
                      onDeleteConfirmed = onDeleteConfirmed,
                      onBackPressed = onBackPressed,
+                     onDateTimeUpdated =  onDateTimeUpdated
                      )
         },
         content = {
