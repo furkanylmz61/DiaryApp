@@ -1,6 +1,5 @@
 package com.furkanylmz.diaryappcourse.data.repository
 
-import android.security.keystore.UserNotAuthenticatedException
 import com.furkanylmz.diaryappcourse.model.Diary
 import com.furkanylmz.diaryappcourse.util.Constants.APP_ID
 import com.furkanylmz.diaryappcourse.util.RequestState
@@ -97,6 +96,25 @@ object MongoDB : MongoRepository {
                 flow { emit(RequestState.Error(UserNotAuthenticatedException())) }
         }
     }
-}
 
-private class UserNotAuthenticatedException: Exception("User is not logged in.")
+    override suspend fun updateDiary(diary: Diary): RequestState<Diary> {
+        return if (user != null) {
+            realm.write {
+                val queriedDiary = query<Diary>(query = "_id == $0", diary._id).first().find()
+                if (queriedDiary != null) {
+                    queriedDiary.title = diary.title
+                    queriedDiary.description = diary.description
+                    queriedDiary.mood = diary.mood
+                    queriedDiary.images = diary.images
+                    queriedDiary.date = diary.date
+                    RequestState.Success(data = queriedDiary)
+                } else {
+                    RequestState.Error(error = Exception("Queried Diary does not exist."))
+                }
+            }
+        } else {
+            RequestState.Error(UserNotAuthenticatedException())
+        }
+    }
+
+private class UserNotAuthenticatedException: Exception("User is not logged in.")}
