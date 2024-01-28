@@ -19,10 +19,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.dialog
 import androidx.navigation.navArgument
 import com.furkanylmz.diaryappcourse.data.repository.MongoDB
-import com.furkanylmz.diaryappcourse.model.Diary
 import com.furkanylmz.diaryappcourse.model.Mood
 import com.furkanylmz.diaryappcourse.presentation.components.DisplayAlertDialog
 import com.furkanylmz.diaryappcourse.presentation.screens.auth.AuthenticationViewModel
