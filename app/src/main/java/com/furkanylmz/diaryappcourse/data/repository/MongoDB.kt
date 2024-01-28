@@ -41,6 +41,28 @@ object MongoDB : MongoRepository {
         }
     }
 
+    override suspend fun deleteDiary(id: ObjectId): RequestState<Boolean> {
+        return if (user != null) {
+            realm.write {
+                val diary =
+                    query<Diary>(query = "_id == $0 AND ownerId == $1", id, user.id)
+                        .first().find()
+                if (diary != null) {
+                    try {
+                        delete(diary)
+                        RequestState.Success(data = true)
+                    } catch (e: Exception) {
+                        RequestState.Error(e)
+                    }
+                } else {
+                    RequestState.Error(Exception("Diary does not exist."))
+                }
+            }
+        } else {
+            RequestState.Error(UserNotAuthenticatedException())
+        }
+    }
+
     override suspend fun insertDiary(diary: Diary): RequestState<Diary> {
         return if (user != null){
             realm.write {

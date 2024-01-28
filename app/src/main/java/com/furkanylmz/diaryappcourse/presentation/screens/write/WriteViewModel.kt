@@ -14,6 +14,7 @@ import com.furkanylmz.diaryappcourse.util.RequestState
 import com.furkanylmz.diaryappcourse.util.toRealmInstant
 import io.realm.kotlin.types.RealmInstant
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.mongodb.kbson.ObjectId
@@ -43,6 +44,9 @@ class WriteViewModel(
         if (uiState.selectedDiaryId != null){
             viewModelScope.launch(Dispatchers.Main) {
                 MongoDB.getSelectedDiary(diaryId = ObjectId.invoke(uiState.selectedDiaryId!!))
+                    .catch {
+                        emit(RequestState.Error(Exception("Diary is already deleted")))
+                    }
                     .collect {diary ->
 
 
@@ -73,7 +77,7 @@ class WriteViewModel(
     }
 
      fun updateDateTime(zonedDateTime: ZonedDateTime){
-        uiState = uiState.copy(updatedDateTime = zonedDateTime.toInstant().toRealmInstant())
+         uiState = uiState.copy(updatedDateTime = zonedDateTime.toInstant().toRealmInstant())
     }
 
     fun upsertDiary(
@@ -137,6 +141,26 @@ class WriteViewModel(
             }
         }
 
+    }
+
+    fun deleteDiary(
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ){
+        viewModelScope.launch(Dispatchers.IO) {
+            if (uiState.selectedDiaryId != null){
+                val  result= MongoDB.deleteDiary(id = ObjectId.invoke(uiState.selectedDiaryId!!))
+                if (result is RequestState.Success){
+                    withContext(Dispatchers.Main){
+                        onSuccess()
+                    }
+                }else if (result is RequestState.Error){
+                    withContext(Dispatchers.Main){
+                        onError(result.error.message.toString())
+                    }
+                }
+            }
+        }
     }
 }
 
